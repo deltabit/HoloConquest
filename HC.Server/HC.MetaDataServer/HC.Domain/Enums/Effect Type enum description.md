@@ -1,0 +1,20 @@
+- `MagicResistReduction`: Represents an effect that reduces the magic resistance of the target.
+- `ArmorReduction`: Represents an effect that reduces the armor of the target.
+- `Evasion`: Represents an effect that grants the ability to dodge or evade incoming attacks.
+- `MovementSpeedBonus`: Represents an effect that increases the movement speed of the hero.
+- `AttackDamageBonus`: Represents an effect that increases the hero's attack damage.
+- `AttackSpeedBonus`: Represents an effect that increases the hero's attack speed.
+- `HealthRegeneration`: Represents an effect that provides passive health regeneration over time.
+- `ManaRegeneration`: Represents an effect that provides passive mana regeneration over time.
+- `CooldownReduction`: Represents an effect that reduces the cooldown of abilities.
+- `SpellAmplification`: Represents an effect that increases the damage or effectiveness of spells.
+- `SpellLifesteal`: Represents an effect that provides lifesteal based on spell damage dealt.
+- `StatusResistance`: Represents an effect that reduces the duration of negative status effects on the hero.
+- `AttackRangeBonus`: Represents an effect that increases the hero's attack range.
+- `CriticalStrike`: Represents an effect that provides a chance to deal increased critical strike damage.
+- `Bash`: Represents an effect that provides a chance to stun or disable the target on attack.
+- `Lifesteal`: Represents an effect that provides lifesteal based on physical damage dealt.
+- `DamageBlock`: Represents an effect that blocks or reduces incoming physical damage.
+- `SpellBlock`: Represents an effect that blocks or reduces incoming magical damage or spells.
+- `DamageReflection`: Represents an effect that reflects a portion of incoming damage back to the attacker.
+- `AttributeBonus`: Represents an effect that increases one or more attributes (Strength, Agility, Intelligence) of the hero.
