@@ -12,7 +12,7 @@ import { environment } from 'src/environment';
 export class SmartContractService {
   private web3: any;
   private contractAddress = environment.blockchain.contract.address;
-  private abi = environment.blockchain.contract.abi;
+  private abi = JSON.parse(environment.blockchain.contract.abi);
 
   constructor(private metamaskService: MetamaskService) {
     this.web3 = new Web3(window.ethereum);
@@ -20,7 +20,6 @@ export class SmartContractService {
 
   readyToFight(): Observable<string | null> {
     const contract = new this.web3.eth.Contract(this.abi, this.contractAddress);
-
     const data = contract.methods.readyToFight().encodeABI();
 
     return this.metamaskService.sendTransaction(this.contractAddress, data).pipe(

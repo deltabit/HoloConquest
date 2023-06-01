@@ -10,9 +10,14 @@ export class GameReadyComponent {
   constructor(private smartContractService: SmartContractService) { }
 
   readyToFight() {
-    this.smartContractService.readyToFight().subscribe(result => {
-      if (result !== null) {
-        console.log('Ready to fight!');
+    this.smartContractService.readyToFight().subscribe({
+      next: (result) => {
+        if (result !== null) {
+          console.log('Ready to fight!');
+        }
+      },
+      error: (error) => {
+        console.error('Error occurred while getting ready to fight', error);
       }
     });
   }

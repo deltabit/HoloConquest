@@ -43,7 +43,7 @@ async function main() {
   // update environment.ts
   const environmentPath = path.join(__dirname, '..', '..', 'HC.Client', 'src', 'environment.ts');
   let environmentData = fs.readFileSync(environmentPath, 'utf8');
-  environmentData = environmentData.replace(/abi: '.*?'/, `abi: '${JSON.stringify(contractAbi)}'`);
+  environmentData = environmentData.replace(/abi: '.*?'/, `abi: ${JSON.stringify(contractAbi)}`);
   environmentData = environmentData.replace(/address: '.*?'/, `address: '${contract.address}'`);
   environmentData = environmentData.replace(/ownerAddress: '.*?'/, `ownerAddress: '${deployer.address}'`);
 
