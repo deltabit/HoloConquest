@@ -16,6 +16,7 @@ namespace HC.MetaDataServer.Controllers
             _gameItemService = gameItemService;
         }
 
+        // works
         [HttpPost("mint")]
         public async Task<IActionResult> MintAsync([FromBody] MintRequest request)
         {

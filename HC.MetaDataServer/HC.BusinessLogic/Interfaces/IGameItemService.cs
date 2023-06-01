@@ -5,7 +5,7 @@ namespace HC.BusinessLogic.Interfaces
 {
     public interface IGameItemService
     {
-        Task<string> MintAsync(MintRequest request);
+        Task<string> MintAsync(MintRequest mintRequest);
 
         Task<string> StartFightAsync(BigInteger tokenId1, BigInteger tokenId2);
 

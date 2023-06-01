@@ -5,8 +5,8 @@ async function main() {
     const GameItem = await ethers.getContractFactory("GameItem");
     const gameItem = GameItem.attach(CONTRACT_ADDRESS);
     
-    // You can add minter and use addres instead CONTRACT_OWNER
-    const player = '0xC0Aa3875E565a81d894cA6C8874Ae7ce42EB8622';//CONTRACT_OWNER; 
+    // You can use player addres instead CONTRACT_OWNER
+    const player = CONTRACT_OWNER; 
     const strength = 4;
     const speed = 4;
     const intelligence = 4;

@@ -5,6 +5,10 @@ using HC.BusinessLogic.Interfaces;
 using HC.Domain.Models;
 using Microsoft.Extensions.Options;
 using HC.Domain.RequestModels;
+using HC.BusinessLogic.Mapper;
+using Nethereum.Hex.HexTypes;
+using Nethereum.RPC.Eth.DTOs;
+using HC.BusinessLogic.DTOs;
 
 namespace HC.BusinessLogic.Services
 {
@@ -19,7 +23,7 @@ namespace HC.BusinessLogic.Services
             IOptions<BlockchainSettings> blockchainOptions)
         {
             //TODO: investigate more safe method of sharing private key (maybe with crypting)
-            _ownerPrivateKey = "contract owner private key here";
+            _ownerPrivateKey = "0xccb9fd4775035a65e0f27d8456379a71789bb4df110d0d88655cd4bdef5e0b6f";
 
             _web3 = new Web3(blockchainOptions.Value.Url);
             _contract = _web3.Eth.GetContract(
@@ -27,25 +31,50 @@ namespace HC.BusinessLogic.Services
                 contractOptions.Value.Address);
         }
 
-        // Only Owner || withlist minter
-        public async Task<string> MintAsync(MintRequest request)
+        // Only Owner | works
+        public async Task<string> MintAsync(MintRequest mintRequest)
         {
             var ownerAddress = new Nethereum.Signer.EthECKey(_ownerPrivateKey).GetPublicAddress();
 
+            var simpleAbility = SimpleAbility.CreateRandomAbilityInt();
+
+            var ability = AbilityMapper.MapToAbility(simpleAbility);
+
             var function = _contract.GetFunction("mint");
+
+            var gasLimit = new HexBigInteger(500000);
 
             var transactionInput = function.CreateTransactionInput(
                 ownerAddress,
-                request.Strength,
-                request.Speed,
-                request.Intelligence,
-                request.Endurance,
-                request.Magic,
-                request.TokenURI);
+                mintRequest.PlayerAddress,
+                ability.Strength,
+                ability.Speed,
+                ability.Intelligence,
+                ability.Endurance,
+                ability.Magic,
+                "fake token URI");
 
-            var result = await _web3.Eth.Transactions.SendTransaction.SendRequestAsync(transactionInput);
+            transactionInput.Gas = gasLimit;
 
-            return result;
+            var transactionHash = await _web3.Eth.Transactions.SendTransaction.SendRequestAsync(transactionInput);
+
+            var receipt = await _web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(transactionHash);
+
+            // Create a filter to find the Transfer event related to the transaction
+            var filterInput = _contract
+                .GetEvent("Transfer")
+                .CreateFilterInput(new BlockParameter(receipt.BlockNumber), BlockParameter.CreateLatest());
+
+            // Query all Transfer events with our filter
+            var events = await _contract
+                .GetEvent("Transfer")
+                .GetAllChangesAsync<TransferEventDTO>(filterInput);
+
+            // Find our event and get the tokenId from it
+            var ourEvent = events.FirstOrDefault(e => e.Log.TransactionHash == transactionHash);
+            var mintedNftId = ourEvent?.Event.TokenId.ToString();
+
+            return mintedNftId;
         }
 
         // Only Owner

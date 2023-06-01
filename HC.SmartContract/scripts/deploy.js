@@ -23,7 +23,7 @@ async function main() {
   });
 
   // read appsettings.json
-  const appSettingsPath = path.join(__dirname, '..', '..', 'HC.Server', 'HC.MetaDataServer', 'HC.MetaDataServer', 'appsettings.json');
+  const appSettingsPath = path.join(__dirname, '..', '..', 'HC.MetaDataServer', 'HC.MetaDataServer', 'appsettings.json');
   const appSettings = JSON.parse(fs.readFileSync(appSettingsPath, 'utf8'));
 
   // update the contract details
@@ -41,7 +41,7 @@ async function main() {
   });
 
   // update environment.ts
-  const environmentPath = path.join(__dirname, '..', '..', 'HC.Client', 'hc-fe', 'src', 'environment.ts');
+  const environmentPath = path.join(__dirname, '..', '..', 'HC.Client', 'src', 'environment.ts');
   let environmentData = fs.readFileSync(environmentPath, 'utf8');
   environmentData = environmentData.replace(/abi: '.*?'/, `abi: '${JSON.stringify(contractAbi)}'`);
   environmentData = environmentData.replace(/address: '.*?'/, `address: '${contract.address}'`);
