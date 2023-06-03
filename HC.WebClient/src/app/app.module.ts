@@ -9,11 +9,14 @@ import { HomeModule } from './modules/home/home.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GameReadyComponent } from './modules/game-ready/game-ready.component';
 import { SmartContractService } from './services/smart-contract.service';
+import { MintComponent } from './modules/mint/mint.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     declarations: [
         AppComponent,
         GameReadyComponent,
+        MintComponent,
     ],
     providers: [
         SmartContractService
@@ -25,7 +28,8 @@ import { SmartContractService } from './services/smart-contract.service';
         BrowserAnimationsModule,
         SharedModule,
         HomeModule,
-        AuthModule
+        AuthModule,
+        HttpClientModule
     ]
 })
 export class AppModule { }

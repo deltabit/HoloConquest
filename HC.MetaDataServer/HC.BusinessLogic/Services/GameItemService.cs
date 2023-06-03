@@ -23,7 +23,7 @@ namespace HC.BusinessLogic.Services
             IOptions<BlockchainSettings> blockchainOptions)
         {
             //TODO: investigate more safe method of sharing private key (maybe with crypting)
-            _ownerPrivateKey = "0xccb9fd4775035a65e0f27d8456379a71789bb4df110d0d88655cd4bdef5e0b6f";
+            _ownerPrivateKey = blockchainOptions.Value.LocalPrivateKey;
 
             _web3 = new Web3(blockchainOptions.Value.Url);
             _contract = _web3.Eth.GetContract(

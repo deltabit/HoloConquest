@@ -29,4 +29,17 @@ export class SmartContractService {
       })
     );
   }
+
+  mint(playerAddress: string): Observable<any> {
+    const contract = new this.web3.eth.Contract(this.abi, this.contractAddress);
+    const data = contract.methods.mint(argument1, argument2, argument3, argument4, argument5, argument6, playerAddress).encodeABI();
+
+    return this.metamaskService.sendTransaction(this.contractAddress, data).pipe(
+      catchError(() => {
+        console.log('Error occurred while minting');
+        return of(null);
+      })
+    );
+}
+
 }

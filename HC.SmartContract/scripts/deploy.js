@@ -4,7 +4,8 @@ const path = require('path');
 
 async function main() {
   const [deployer] = await hre.ethers.getSigners();
-
+  const privateKeyName = 'LOCAL_PRIVATE_KEY';
+  
   console.log("Deploying contracts with the account:", deployer.address);
 
   const ContractFactory = await hre.ethers.getContractFactory("GameItem");
@@ -22,6 +23,10 @@ async function main() {
     if (err) throw err;
   });
 
+  // read the .env file
+  const env = fs.readFileSync('.env', 'utf8');
+  const ownerPrivateKey = env.split('\n').find(line => line.startsWith(privateKeyName)).split('=')[1];
+
   // read appsettings.json
   const appSettingsPath = path.join(__dirname, '..', '..', 'HC.MetaDataServer', 'HC.MetaDataServer', 'appsettings.json');
   const appSettings = JSON.parse(fs.readFileSync(appSettingsPath, 'utf8'));
@@ -30,6 +35,7 @@ async function main() {
   appSettings.Contract.Abi = contractAbi;
   appSettings.Contract.Address = contract.address;
   appSettings.Contract.OwnerAddress = deployer.address;
+  appSettings.Ganache.LocalPrivateKey = ownerPrivateKey;
 
   // write back to appsettings.json
   fs.writeFileSync(
@@ -37,11 +43,10 @@ async function main() {
     JSON.stringify(appSettings, null, 2), 
     (err) => {
     if (err) throw err;
-    console.log('appsettings.json has been updated!');
   });
 
   // update environment.ts
-  const environmentPath = path.join(__dirname, '..', '..', 'HC.Client', 'src', 'environment.ts');
+  const environmentPath = path.join(__dirname, '..', '..', 'HC.WebClient', 'src', 'environment.ts');
   let environmentData = fs.readFileSync(environmentPath, 'utf8');
   environmentData = environmentData.replace(/abi: '.*?'/, `abi: ${JSON.stringify(contractAbi)}`);
   environmentData = environmentData.replace(/address: '.*?'/, `address: '${contract.address}'`);
@@ -49,7 +54,6 @@ async function main() {
 
   fs.writeFileSync(environmentPath, environmentData, 'utf8', (err) => {
     if (err) throw err;
-    console.log('environment.ts has been updated!');
   });
 }
 
